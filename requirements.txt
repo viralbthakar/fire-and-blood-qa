@@ -1,5 +1,6 @@
 nltk
 pandas
 tensorflow
+python-docx
 trafilatura
 wikitextparser
