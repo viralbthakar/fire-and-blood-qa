@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 import streamlit as st
-from ..src.utils import styled_print, create_dir, save_uploadedfile
+from src.utils import styled_print, create_dir, save_uploadedfile
 
 raw_data_dir = "../data/raw-data"
 out_dir = "../data/processed-data"
