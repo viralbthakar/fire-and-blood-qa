@@ -5,7 +5,6 @@ import time
 import json
 import pysrt
 import requests
-import trafilatura
 import streamlit as st
 from collections import defaultdict
 from wikitextparser import parse, remove_markup
@@ -57,36 +56,6 @@ def extract_text_from_srt(file_path):
         subtitle_dict["end_seconds"].append(sub.end.seconds)
         subtitle_dict["text"].append(sub.text)
     return subtitle_dict
-
-
-def extract_text_from_url(url):
-    # Download HTML Code
-    downloaded_url = trafilatura.fetch_url(url)
-
-    # Try Extracting Text data as
-    try:
-        extract = trafilatura.extract(
-            downloaded_url,
-            output_format='json',
-            favor_precisions=True,
-            favour_recall=True,
-            include_comments=False,
-            include_tables=False,
-            date_extraction_params={
-                'extensive_search': True, 'original_date': True}
-        )
-    except AttributeError:
-        extract = trafilatura.extract(
-            downloaded_url,
-            output_format='json',
-            date_extraction_params={
-                'extensive_search': True, 'original_date': True}
-        )
-    if extract:
-        json_output = json.loads(extract)
-        return json_output['text']
-    else:
-        return "None"
 
 
 def extract_fandom_wikis(url, titles):
