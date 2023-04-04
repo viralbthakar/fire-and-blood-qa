@@ -1,4 +1,5 @@
 nltk
+pysrt
 pandas
 tensorflow
 python-docx
