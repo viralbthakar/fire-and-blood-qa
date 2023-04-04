@@ -148,4 +148,4 @@ def remove_backslash(text):
 def save_uploadedfile(uploadedfile, path="tempDir"):
     with open(os.path.join(path, uploadedfile.name), "wb") as f:
         f.write(uploadedfile.getbuffer())
-    return st.success(f"Saved File:{uploadedfile.name} to {path}")
+    return os.path.join(path, uploadedfile.name)
