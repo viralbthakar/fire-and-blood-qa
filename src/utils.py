@@ -118,3 +118,16 @@ def save_uploadedfile(uploadedfile, path="tempDir"):
     with open(os.path.join(path, uploadedfile.name), "wb") as f:
         f.write(uploadedfile.getbuffer())
     return os.path.join(path, uploadedfile.name)
+
+
+def add_to_session_state(session_state, key, value):
+    if key not in session_state:
+        session_state[key] = value
+    return session_state
+
+
+def fetch_session_state(session_state, key):
+    if key in session_state:
+        return session_state[key]
+    else:
+        return None

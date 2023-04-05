@@ -4,7 +4,7 @@ import json
 import pandas as pd
 import streamlit as st
 from streamlit_extras.switch_page_button import switch_page
-from src.utils import styled_print, create_dir, save_uploadedfile, extract_paragraphs, extract_fandom_wikis
+from src.utils import styled_print, create_dir, save_uploadedfile, extract_paragraphs, extract_fandom_wikis, add_to_session_state
 
 raw_data_dir = create_dir("./", "data/raw-data")
 out_dir = create_dir("./", "data/processed-data")
@@ -26,6 +26,12 @@ st.set_page_config(
     }
 )
 
+st.session_state = add_to_session_state(
+    st.session_state, "raw_data_dir", raw_data_dir)
+st.session_state = add_to_session_state(st.session_state, "out_dir", out_dir)
+st.session_state = add_to_session_state(
+    st.session_state, "config_dir", config_dir)
+
 st.title("Data Extractor Tool")
 st.write("Tool to extract data from different sources.")
 
@@ -40,18 +46,26 @@ if docx_file_uploader is not None:
 
     start_book_extraction = st.button("Extract Paragraphs!")
     if start_book_extraction:
+        book_text_dir = create_dir(out_dir, "clean-csvs")
         with st.spinner('Extracting Paragraphs...'):
-            book_text_dir = create_dir(out_dir, "clean-csvs")
-            row_paragraphs = extract_paragraphs(
-                book_docx_path, min_char_count=10)
-            styled_print(
-                f"Found Total {len(row_paragraphs)} Paragraphs from the Book {book_docx_path}", header=True)
-            book_df = pd.DataFrame(row_paragraphs.items(),
-                                   columns=["id", "paragraphs"])
-            book_df.to_csv(os.path.join(
-                book_text_dir, "book-raw-paragraphs.csv"), index=False, header=True)
-            st.success(
-                f"Found Total {len(row_paragraphs)} Paragraphs from the Book {book_docx_path}")
+            # Check if book-raw-paragraphs.csv file exists
+            if os.path.isfile(os.path.join(book_text_dir, "book-raw-paragraphs.csv")):
+                st.warning(
+                    "Book paragraphs file already exists. Skipping extraction.")
+                book_df = pd.read_csv(os.path.join(
+                    book_text_dir, "book-raw-paragraphs.csv"))
+            else:
+                with st.spinner('Extracting Paragraphs...'):
+                    row_paragraphs = extract_paragraphs(
+                        book_docx_path, min_char_count=10)
+                    styled_print(
+                        f"Found Total {len(row_paragraphs)} Paragraphs from the Book {book_docx_path}", header=True)
+                    book_df = pd.DataFrame(row_paragraphs.items(),
+                                           columns=["id", "paragraphs"])
+                    book_df.to_csv(os.path.join(
+                        book_text_dir, "book-raw-paragraphs.csv"), index=False, header=True)
+                    st.success(
+                        f"Found Total {len(row_paragraphs)} Paragraphs from the Book {book_docx_path}")
             st.subheader("Sample Paragraphs")
             st.dataframe(book_df)
 
@@ -93,10 +107,15 @@ if config_file_uploader is not None:
                         f"Writing Text into {title.replace(' ', '-')}.csv ...")
                     hod_df = pd.DataFrame.from_dict(text_dict)
                     hod_df.to_csv(os.path.join(
-                        element_dir, f"{title.replace(' ', '-')}.csv"), index=False, header=False)
+                        element_dir, f"{title.replace(' ', '-')}.csv"), index=False, header=True)
                     st.subheader("Sample Data")
                     st.dataframe(hod_df)
+            st.success(
+                f"Successfully Extracted House of Dragons Data Stored at {hod_out_dir}")
+
+st.sidebar.success("Data Extraction Done!")
 
 data_cleaner_page = st.button("Data Cleaner!")
 if data_cleaner_page:
     switch_page("Data Cleaner")
+    print(st.session_state)
