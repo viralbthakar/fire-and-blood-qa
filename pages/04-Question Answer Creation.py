@@ -105,7 +105,7 @@ if all_qa_extraction:
                                 doc = extract_NER(
                                     sentence, model="en_core_web_lg")
                                 qas = create_qa_pairs_from_NER(doc)
-                                for que, ans in qas:
+                                for que, ans in qas[:5]:
                                     question_answers["context"].append(
                                         sentence)
                                     question_answers["questions"].append(que)
