@@ -1,5 +1,12 @@
+import nltk
 import streamlit as st
 from streamlit_extras.switch_page_button import switch_page
+
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+
 
 st.set_page_config(
     page_title="Dragon's Eye",

@@ -10,3 +10,5 @@ trafilatura
 wikitextparser
 streamlit-extras
 seaborn
+tensorflow-datasets
+transformers
