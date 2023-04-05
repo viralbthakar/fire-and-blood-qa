@@ -47,27 +47,26 @@ if docx_file_uploader is not None:
     start_book_extraction = st.button("Extract Paragraphs!")
     if start_book_extraction:
         book_text_dir = create_dir(out_dir, "clean-csvs")
-        with st.spinner('Extracting Paragraphs...'):
-            # Check if book-raw-paragraphs.csv file exists
-            if os.path.isfile(os.path.join(book_text_dir, "book-raw-paragraphs.csv")):
-                st.warning(
-                    "Book paragraphs file already exists. Skipping extraction.")
-                book_df = pd.read_csv(os.path.join(
-                    book_text_dir, "book-raw-paragraphs.csv"))
-            else:
-                with st.spinner('Extracting Paragraphs...'):
-                    row_paragraphs = extract_paragraphs(
-                        book_docx_path, min_char_count=10)
-                    styled_print(
-                        f"Found Total {len(row_paragraphs)} Paragraphs from the Book {book_docx_path}", header=True)
-                    book_df = pd.DataFrame(row_paragraphs.items(),
-                                           columns=["id", "paragraphs"])
-                    book_df.to_csv(os.path.join(
-                        book_text_dir, "book-raw-paragraphs.csv"), index=False, header=True)
-                    st.success(
-                        f"Found Total {len(row_paragraphs)} Paragraphs from the Book {book_docx_path}")
-            st.subheader("Sample Paragraphs")
-            st.dataframe(book_df)
+        # Check if book-raw-paragraphs.csv file exists
+        if os.path.isfile(os.path.join(book_text_dir, "book-raw-paragraphs.csv")):
+            st.warning(
+                "Book paragraphs file already exists. Skipping extraction.")
+            book_df = pd.read_csv(os.path.join(
+                book_text_dir, "book-raw-paragraphs.csv"))
+        else:
+            with st.spinner('Extracting Paragraphs...'):
+                row_paragraphs = extract_paragraphs(
+                    book_docx_path, min_char_count=10)
+                styled_print(
+                    f"Found Total {len(row_paragraphs)} Paragraphs from the Book {book_docx_path}", header=True)
+                book_df = pd.DataFrame(row_paragraphs.items(),
+                                       columns=["id", "paragraphs"])
+                book_df.to_csv(os.path.join(
+                    book_text_dir, "book-raw-paragraphs.csv"), index=False, header=True)
+                st.success(
+                    f"Found Total {len(row_paragraphs)} Paragraphs from the Book {book_docx_path}")
+        st.subheader("Sample Paragraphs")
+        st.dataframe(book_df)
 
 
 st.header(":movie_camera: Extract Wikis from Fandom!")
