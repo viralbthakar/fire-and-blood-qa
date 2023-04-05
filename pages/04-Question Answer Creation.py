@@ -65,8 +65,8 @@ if debug_qa_extraction:
                     for index, row in data_df.iterrows():
                         paragraph = row['cleaned_paragraphs']
                         sentences = sent_tokenize(paragraph)
-                        for sentence in sentences[1000]:
-                            doc = extract_NER(sentence, model="en_core_web_lg")
+                        for sentence in sentences[1]:
+                            doc = extract_NER(sentence, model="en_core_web_sm")
                             qas = create_qa_pairs_from_NER(doc)
                             for que, ans in qas[0]:
                                 question_answers["context"].append(sentence)
