@@ -10,6 +10,3 @@ trafilatura
 wikitextparser
 streamlit-extras
 seaborn
-collections
-numpy
-matplotlib
