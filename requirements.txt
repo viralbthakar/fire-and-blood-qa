@@ -12,3 +12,4 @@ streamlit-extras
 seaborn
 tensorflow-datasets
 transformers
+sklearn
