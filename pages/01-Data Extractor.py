@@ -46,7 +46,7 @@ if docx_file_uploader is not None:
 
     start_book_extraction = st.button("Extract Paragraphs!")
     if start_book_extraction:
-        book_text_dir = create_dir(out_dir, "clean-csvs")
+        book_text_dir = create_dir(out_dir, "book-csvs")
         # Check if book-raw-paragraphs.csv file exists
         if os.path.isfile(os.path.join(book_text_dir, "book-raw-paragraphs.csv")):
             st.warning(
