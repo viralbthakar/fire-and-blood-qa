@@ -149,3 +149,10 @@ if all_data_analysis:
                 fig = analyzer.plot_top_k_ngrams(
                     top_k_trigrams, title=f"Top {10} Trigrams", figsize=(16, 16), dpi=300, save_flag=False)
                 t6.pyplot(fig)
+
+st.sidebar.success("Data Analysis Done!")
+
+qa_creation_page = st.button("QA Creator!")
+if qa_creation_page:
+    switch_page("Question Answer Creation")
+    print(st.session_state)

@@ -1,6 +1,7 @@
 nltk
 pysrt
 pandas
+openai
 kaleido
 tensorflow
 python-docx

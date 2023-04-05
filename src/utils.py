@@ -3,6 +3,7 @@ import re
 import docx
 import time
 import json
+import spacy
 import pysrt
 import requests
 import numpy as np
@@ -173,3 +174,39 @@ def plot_count_plot(df, column, hue=None, title="Count Plot", figsize=(24, 24), 
         fig.savefig(file_path, dpi=dpi, facecolor='white')
         plt.close()
     return fig
+
+
+def extract_NER(sentence, model="en_core_web_lg"):
+    nlp = spacy.load(model)
+    doc = nlp(sentence)
+    return doc
+
+
+def create_qa_pairs_from_NER(ner_doc):
+    questions = []
+    for ent in ner_doc.ents:
+        if ent.label_ == "PERSON":
+            question = f"Who is {ent.text}?"
+            answer = f"{ent.text} was a {ent.label_} who {ent.sent.text}"
+            questions.append((question, answer))
+        elif ent.label_ == "ORG":
+            question = f"What is {ent.text}?"
+            answer = f"{ent.text} is a {ent.label_} that {ent.sent.text}"
+            questions.append((question, answer))
+        elif ent.label_ == "GPE":
+            question = f"Where is {ent.text}?"
+            answer = f"{ent.text} is a {ent.label_} that {ent.sent.text}"
+            questions.append((question, answer))
+        elif ent.label_ == "DATE":
+            question = f"When did {ent.text} happen?"
+            answer = f"{ent.text} was a {ent.label_} that {ent.sent.text}"
+            questions.append((question, answer))
+        elif ent.label_ == "LOC":
+            question = f"What is located at {ent.text}?"
+            answer = f"{ent.text} is a {ent.label_} where {ent.sent.text}"
+            questions.append((question, answer))
+        elif ent.label_ == "FAC":
+            question = f"What is the {ent.text}?"
+            answer = f"The {ent.text} is a {ent.label_} that {ent.sent.text}"
+            questions.append((question, answer))
+    return questions
