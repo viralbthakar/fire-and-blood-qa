@@ -5,3 +5,4 @@ tensorflow
 python-docx
 trafilatura
 wikitextparser
+streamlit-extras

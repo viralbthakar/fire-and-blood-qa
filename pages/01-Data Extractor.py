@@ -3,20 +3,33 @@ import time
 import json
 import pandas as pd
 import streamlit as st
+from streamlit_extras.switch_page_button import switch_page
 from src.utils import styled_print, create_dir, save_uploadedfile, extract_paragraphs, extract_fandom_wikis
 
 raw_data_dir = create_dir("./", "data/raw-data")
 out_dir = create_dir("./", "data/processed-data")
 config_dir = create_dir("./", "data/config")
 
-st.set_page_config(page_title="Data Extractor")
 
 # Set the title and instructions for the page
 styled_print("Initiating Data Extractor", header=True)
+
+st.set_page_config(
+    page_title="Data Extractor",
+    page_icon=":zap:",
+    layout="wide",
+    initial_sidebar_state="expanded",
+    menu_items={
+        'Get Help': 'https://www.linkedin.com/in/viralbthakar/',
+        'Report a bug': "https://github.com/viralbthakar/fire-and-blood-qa/issues/new/choose",
+        'About': "This is an *extremely* cool app!"
+    }
+)
+
 st.title("Data Extractor Tool")
 st.write("Tool to extract data from different sources.")
 
-st.header("Extract Paragraphs from Book")
+st.header(":closed_book: Extract Paragraphs from Book")
 # Create a file upload component and set its type to CSV
 docx_file_uploader = st.file_uploader("Upload a DOCX file", type=["docx"])
 
@@ -43,7 +56,7 @@ if docx_file_uploader is not None:
             st.dataframe(book_df)
 
 
-st.header("Extract Wikis from Fandom!")
+st.header(":movie_camera: Extract Wikis from Fandom!")
 config_file_uploader = st.file_uploader("Upload a CONFIG file", type=["json"])
 if config_file_uploader is not None:
     config_file = save_uploadedfile(config_file_uploader, path=config_dir)
@@ -83,3 +96,7 @@ if config_file_uploader is not None:
                         element_dir, f"{title.replace(' ', '-')}.csv"), index=False, header=False)
                     st.subheader("Sample Data")
                     st.dataframe(hod_df)
+
+data_cleaner_page = st.button("Data Cleaner!")
+if data_cleaner_page:
+    switch_page("Data Cleaner")

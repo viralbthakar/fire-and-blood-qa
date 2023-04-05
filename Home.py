@@ -1,0 +1,46 @@
+import streamlit as st
+from streamlit_extras.switch_page_button import switch_page
+
+st.set_page_config(
+    page_title="Dragon's Eye",
+    page_icon="🐲",
+    layout="wide",
+    initial_sidebar_state="expanded",
+    menu_items={
+        'Get Help': 'https://www.linkedin.com/in/viralbthakar/',
+        'Report a bug': "https://github.com/viralbthakar/fire-and-blood-qa/issues/new/choose",
+        'About': "This is an *extremely* cool app!"
+    }
+)
+
+st.header("🐲 Dragon's Eye")
+
+st.markdown(
+    """
+        ## About our app
+        ### Data extraction tool
+        Behold, the data extraction tool crafted by our own hands! Like a mighty sword wielded by a valiant knight, this tool can pierce through the toughest of DOCX files, extracting only the most relevant and accurate paragraphs. And just as the smiths of Valyria forged their legendary blades, we have honed this tool to perfection, ensuring that the extracted data is pristine and pure.
+        But that is not all, for this tool is also capable of parsing the secrets and knowledge hidden within the depths of Fandom Wiki. Like a warg delving into the mind of a beast, we can unravel the complexities of the data and translate them into meaningful CSVs. And so, with this tool at your side, you can navigate the treacherous waters of data analysis with ease and confidence, like a true lord of the Seven Kingdoms.
+        ### QA System
+        Behold the power of the QA system, a tool forged from the ancient wisdom of the SQuAD dataset and sharpened to a razor's edge with the biLSTMs and attention mechanisms of the gods. With but a mere question from the user, this system can plunge deep into the Fire & Blood dataset and extract the most relevant context with ease, like a skilled hunter stalking its prey.
+        But the true power of this system lies in its ability to extract the answer to any question from the context with the speed and precision of a trained assassin. With its keen eye for detail and its rule-based approach, it can slice through even the thickest of texts to extract the hidden gems of knowledge buried within.
+        So let your curiosity be your guide, for the QA system stands ready to meet any challenge, to conquer any task, and to emerge victorious like a true hero of the Seven Kingdoms.
+        
+        ## About Us
+        ### Viral Thakar
+        Hailing from the lands of Westeros, Viral, a skilled Machine Learning Research Engineer whose mastery of AI and machine learning algorithms is as impressive as a Dothraki warrior wielding a curved arakh. With a focus on computer vision and natural language processing, Viral is a force to be reckoned with when it comes to unsupervised domain adaptation, self-supervised learning, and one-shot learning.
+        Using the power of generative models, graph neural networks, recurrent neural networks, and convolutional neural networks, Viral has worked with industry leaders like Autodesk, AISIN, and Desjardins to develop cutting-edge solutions for a wide range of data types including images, videos, point clouds, text, and time-series data.
+        But Viral's skills extend beyond just technical prowess. With experience contributing to research proposals and pragmatic development directions, Viral is a true team player, always willing to lend a helping hand or share their expertise like a wise maester guiding their apprentices. Truly, Viral is a valuable asset to any team, a hero whose deeds will be sung of in tales for years to come.
+        
+        ### Monty Gole
+        Monty's insatiable curiosity is akin to that of the legendary maesters of the Citadel, whose thirst for knowledge knows no bounds. He is a skilled student of computer science, and his fascination with the inner workings of deep learning algorithms and LLMs is reminiscent of the maesters' obsession with unlocking the secrets of the universe.
+        As a Linux enthusiast and a master of low-level computing, Monty is like a skilled craftsman, forever tinkering with the machines that surround him, seeking to understand their hidden workings and to improve upon them. His boundless curiosity has made him a sought-after expert, with lords and ladies vying for his attention in order to gain an advantage over their enemies.
+        Monty's passion for discovery and exploration is the hallmark of a true adventurer, a trait that has served him well in his quest for knowledge. Like the great explorers of the past, he is always eager to push the boundaries of what is possible, to delve deeper into the mysteries of the computing world, and to uncover new insights and discoveries that will benefit all of humanity.
+        In the end, Monty's insatiable curiosity is what sets him apart from the rest, making him a true master of his craft, and a defender of the realm against the forces of ignorance and darkness that threaten to engulf it.
+    """
+)
+
+st.sidebar.success("Build Successful")
+let_s_begin = st.button("Let's Begin!")
+if let_s_begin:
+    switch_page("Data Extractor")
