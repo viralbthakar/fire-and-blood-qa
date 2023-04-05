@@ -56,13 +56,17 @@ if all_data_clean:
     selected_files = [f for f in csv_files]
     with st.spinner('Cleaning all data ...'):
         for i, file in enumerate(selected_files):
+            st.subheader(f"Raw Data From {file}")
             data_dict = pd.read_csv(file)
+            st.dataframe(data_dict)
             cleaner = ParagraphCleaner(
                 data_dict, 'paragraphs', 'cleaned_paragraphs')
             data_dict = cleaner.clean_data()
             clean_file_path = os.path.join(
                 clean_data_dir, f"{os.path.basename(file)}")
             data_dict.to_csv(clean_file_path, index=False, header=True)
+            st.subheader(f"Clean Data From {clean_file_path}")
+            st.dataframe(data_dict)
             st.success(f"Saved File: {clean_file_path}")
 
 st.sidebar.success("Data Cleaning Done!")

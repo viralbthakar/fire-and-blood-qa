@@ -25,9 +25,9 @@ st.set_page_config(
 st.title("Question Answer Creation Tool")
 st.write("Tool to perform create question, answer and context data for model training.")
 
+question_answer_dir = create_dir("./", "data/qa-data")
 out_dir = fetch_session_state(st.session_state, "out_dir")
 clean_data_dir = fetch_session_state(st.session_state, "clean_data_dir")
-question_answer_dir = create_dir(out_dir, "question_answer_csvs")
 st.session_state = add_to_session_state(
     st.session_state, "question_answer_dir", question_answer_dir)
 
@@ -47,40 +47,20 @@ debug_qa_extraction = st.button("Debug QA Creation!")
 all_qa_extraction = st.button("QA Create All!")
 
 if debug_qa_extraction:
-    for i, file in enumerate(selected_files):
-        data_df = pd.read_csv(file)
-        question_answers = defaultdict(list)
-        st.subheader(f"Raw Data From {file}")
-        st.dataframe(data_df)
-        if genre == 'NER':
-            qa_csv_path = create_dir(question_answer_dir, genre)
-            with st.spinner('Generating Question Answers ...'):
-                for index, row in data_df.iterrows():
-                    paragraph = row['cleaned_paragraphs']
-                    sentences = sent_tokenize(paragraph)
-                    for sentence in sentences:
-                        doc = extract_NER(sentence, model="en_core_web_lg")
-                        qas = create_qa_pairs_from_NER(doc)
-                        for que, ans in qas:
-                            question_answers["context"].append(sentence)
-                            question_answers["questions"].append(que)
-                            question_answers["answers"].append(ans)
-                qa_df = pd.DataFrame.from_dict(question_answers)
-                qa_df.to_csv(os.path.join(qa_csv_path, os.path.basename(
-                    file)), index=False, header=True)
-                st.dataframe(qa_df)
-
-if all_qa_extraction:
-    selected_files = [f for f in csv_files]
-    with st.spinner('Creating QA Pairs ...'):
+    if genre == 'NER':
+        qa_csv_path = create_dir(question_answer_dir, genre)
         for i, file in enumerate(selected_files):
-            st.subheader(f"{os.path.basename(file)}")
             data_df = pd.read_csv(file)
             question_answers = defaultdict(list)
             st.subheader(f"Raw Data From {file}")
             st.dataframe(data_df)
-            if genre == 'NER':
-                qa_csv_path = create_dir(question_answer_dir, genre)
+            if os.path.isfile(os.path.join(qa_csv_path, os.path.basename(file))):
+                st.warning(
+                    "Question Answer file already exists. Skipping extraction.")
+                qa_df = pd.read_csv(os.path.join(
+                    qa_csv_path, os.path.basename(file)))
+                st.dataframe(qa_df)
+            else:
                 with st.spinner('Generating Question Answers ...'):
                     for index, row in data_df.iterrows():
                         paragraph = row['cleaned_paragraphs']
@@ -96,6 +76,46 @@ if all_qa_extraction:
                     qa_df.to_csv(os.path.join(qa_csv_path, os.path.basename(
                         file)), index=False, header=True)
                     st.dataframe(qa_df)
+                    st.success(
+                        f"Saved File: {os.path.join(qa_csv_path, os.path.basename(file))}")
+
+if all_qa_extraction:
+    selected_files = [f for f in csv_files]
+    if genre == 'NER':
+        qa_csv_path = create_dir(question_answer_dir, genre)
+        with st.spinner('Creating QA Pairs ...'):
+            for i, file in enumerate(selected_files):
+                data_df = pd.read_csv(file)
+                question_answers = defaultdict(list)
+                st.subheader(f"Raw Data From {file}")
+                st.dataframe(data_df)
+
+                if os.path.isfile(os.path.join(qa_csv_path, os.path.basename(file))):
+                    st.warning(
+                        "Question Answer file already exists. Skipping extraction.")
+                    qa_df = pd.read_csv(os.path.join(
+                        qa_csv_path, os.path.basename(file)))
+                    st.dataframe(qa_df)
+                else:
+                    with st.spinner('Generating Question Answers ...'):
+                        for index, row in data_df.iterrows():
+                            paragraph = row['cleaned_paragraphs']
+                            sentences = sent_tokenize(paragraph)
+                            for sentence in sentences:
+                                doc = extract_NER(
+                                    sentence, model="en_core_web_lg")
+                                qas = create_qa_pairs_from_NER(doc)
+                                for que, ans in qas:
+                                    question_answers["context"].append(
+                                        sentence)
+                                    question_answers["questions"].append(que)
+                                    question_answers["answers"].append(ans)
+                        qa_df = pd.DataFrame.from_dict(question_answers)
+                        qa_df.to_csv(os.path.join(qa_csv_path, os.path.basename(
+                            file)), index=False, header=True)
+                        st.dataframe(qa_df)
+                        st.success(
+                            f"Saved File: {os.path.join(qa_csv_path, os.path.basename(file))}")
 
 st.sidebar.success("Question Answer Creation is Done!")
 

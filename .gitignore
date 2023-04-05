@@ -7,4 +7,3 @@
 *.png
 .DS_Store
 .env
-data/

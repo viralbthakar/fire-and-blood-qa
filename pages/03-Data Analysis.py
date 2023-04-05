@@ -99,7 +99,6 @@ if all_data_analysis:
     selected_files = [f for f in csv_files]
     with st.spinner('Analyzing all data ...'):
         for i, file in enumerate(selected_files):
-            st.subheader(f"{os.path.basename(file)}")
             data_dict = pd.read_csv(file)
             st.subheader(f"Raw Data From {file}")
             st.dataframe(data_dict)
@@ -149,6 +148,7 @@ if all_data_analysis:
                 fig = analyzer.plot_top_k_ngrams(
                     top_k_trigrams, title=f"Top {10} Trigrams", figsize=(16, 16), dpi=300, save_flag=False)
                 t6.pyplot(fig)
+                st.success(f"Analysis of: {file}")
 
 st.sidebar.success("Data Analysis Done!")
 

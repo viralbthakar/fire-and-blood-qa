@@ -1,4 +1,5 @@
 nltk
+spacy
 pysrt
 pandas
 openai
