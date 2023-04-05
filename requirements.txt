@@ -1,8 +1,10 @@
 nltk
 pysrt
 pandas
+kaleido
 tensorflow
 python-docx
 trafilatura
 wikitextparser
 streamlit-extras
+plotly==5.14.0

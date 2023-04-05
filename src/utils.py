@@ -5,7 +5,10 @@ import time
 import json
 import pysrt
 import requests
+import numpy as np
 import streamlit as st
+import seaborn as sns
+import matplotlib.pyplot as plt
 from collections import defaultdict
 from wikitextparser import parse, remove_markup
 
@@ -131,3 +134,42 @@ def fetch_session_state(session_state, key):
         return session_state[key]
     else:
         return None
+
+
+def plot_box_plot_hist_plot(df, column, title="Distribution Plot", figsize=(16, 16),
+                            dpi=300, save_flag=False, file_path=None):
+    fig, (ax_box, ax_hist) = plt.subplots(
+        nrows=2,
+        sharex=True,
+        figsize=figsize,
+        gridspec_kw={"height_ratios": (.20, .80)},
+        dpi=dpi,
+        constrained_layout=False
+    )
+    sns.boxplot(data=df, x=column, ax=ax_box)
+    sns.histplot(data=df, x=column, ax=ax_hist, kde=True, bins='sqrt')
+    ax_box.set(xlabel='')
+    ax_box.set_facecolor('white')
+    ax_hist.set_facecolor('white')
+    plt.title(title)
+    if save_flag:
+        fig.savefig(file_path, dpi=dpi, facecolor='white')
+        plt.close()
+    return fig
+
+
+def plot_count_plot(df, column, hue=None, title="Count Plot", figsize=(24, 24), dpi=300,
+                    save_flag=False, file_path=None):
+    fig, axs = plt.subplots(1, 1, figsize=figsize,
+                            dpi=dpi, constrained_layout=False)
+    pt = sns.countplot(data=df, x=column, hue=hue,
+                       palette=sns.color_palette("Set2"))
+    pt.set_xticklabels(pt.get_xticklabels(), rotation=30)
+    if hue is not None:
+        axs.legend(loc="upper right", title=hue)
+    axs.set_facecolor('white')
+    plt.title(title)
+    if save_flag:
+        fig.savefig(file_path, dpi=dpi, facecolor='white')
+        plt.close()
+    return fig

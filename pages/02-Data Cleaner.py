@@ -34,8 +34,6 @@ for root, dirs, files in os.walk(out_dir):
     for file in files:
         if (file.endswith(".csv")):
             csv_files.append(os.path.join(root, file))
-
-st.header("Data Cleaning Workflow")
 selected_files = st.selectbox("Select Files", csv_files)
 selected_files = [selected_files]
 
