@@ -4,7 +4,6 @@ pysrt
 pandas
 openai
 kaleido
-tensorflow
 python-docx
 trafilatura
 wikitextparser
@@ -13,3 +12,5 @@ seaborn
 tensorflow-datasets
 transformers
 scikit-learn
+tensorflow==2.11.1
+transformers==4.27.2
