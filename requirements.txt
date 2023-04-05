@@ -9,4 +9,7 @@ python-docx
 trafilatura
 wikitextparser
 streamlit-extras
-plotly==5.14.0
+seaborn
+collections
+numpy
+matplotlib
